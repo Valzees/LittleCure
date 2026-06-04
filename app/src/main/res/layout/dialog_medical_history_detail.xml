@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:background="@color/colorCardBg">
+
+        <!-- Clinic Header -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="LittleCure"
+            android:textColor="@color/colorPrimary"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="2dp"
+            android:text="Digital Medical Receipt"
+            android:textColor="@color/colorTextDark"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.05" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="12dp"
+            android:background="@color/colorBorder" />
+
+        <!-- Receipt Metadata -->
+        <TextView
+            android:id="@+id/tvReceiptMeta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Date: 2026-06-04 | Ticket: -"
+            android:textColor="@color/colorTextLight"
+            android:textSize="12sp"
+            android:gravity="center" />
+
+        <!-- Patient Info -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Patient Details"
+            android:textColor="@color/colorPrimary"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:background="#F8FAFC"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <TextView
+                android:id="@+id/tvReceiptChildName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Child Name: -"
+                android:textColor="@color/colorTextDark"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tvReceiptChildAge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="Child Age: -"
+                android:textColor="@color/colorTextDark"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tvReceiptParentName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="Parent/Guardian: -"
+                android:textColor="@color/colorTextDark"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tvReceiptParentPhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="Phone: -"
+                android:textColor="@color/colorTextDark"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <!-- Medical Findings -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Clinical Summary"
+            android:textColor="@color/colorPrimary"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:background="#F8FAFC"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <TextView
+                android:id="@+id/tvReceiptComplaint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chief Complaint: -"
+                android:textColor="@color/colorTextDark"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tvReceiptDiagnosis"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Diagnosis: -"
+                android:textColor="@color/colorTextDark"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Receipt Cost Breakdown -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Itemized Billing"
+            android:textColor="@color/colorPrimary"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:background="#F8FAFC"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <!-- Consultation fee -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Doctor Consultation Fee"
+                    android:textColor="@color/colorTextDark"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="Rp 150,000"
+                    android:textColor="@color/colorTextDark"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="8dp"
+                android:background="@color/colorBorder" />
+
+            <!-- Medicines section title inside receipt -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Prescribed Medicines &amp; Costs:"
+                android:textColor="@color/colorTextLight"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <!-- Dynamic medicines list container -->
+            <LinearLayout
+                android:id="@+id/layoutReceiptMedicines"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:orientation="vertical" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1.5dp"
+                android:layout_marginVertical="10dp"
+                android:background="@color/colorPrimary" />
+
+            <!-- Total Cost -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TOTAL BILL"
+                    android:textColor="@color/colorTextDark"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvReceiptTotalBill"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="Rp 150,000"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tvReceiptPaymentStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:background="@color/status_completed_bg"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="2dp"
+                android:text="STATUS: PAID (Lunas)"
+                android:textColor="@color/status_completed_text"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Dialog Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btnReceiptPay"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="6dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:text="Pay Now"
+                android:textColor="@color/white"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/btnReceiptDownload"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:backgroundTint="@color/colorSecondary"
+                android:text="Download PDF / Print Receipt"
+                android:textColor="@color/white"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+
+            <Button
+                android:id="@+id/btnReceiptClose"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="6dp"
+                android:text="Close"
+                android:textColor="@color/colorTextLight"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

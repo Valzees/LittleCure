@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:background="@color/colorCardBg">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Child Visit Registration Form"
+            android:textColor="@color/colorTextDark"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="Please complete your child's visit and health details."
+            android:textColor="@color/colorTextLight"
+            android:textSize="12sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="12dp"
+            android:background="@color/colorBorder" />
+
+        <!-- 1. Visit Date Input -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Visit Date"
+            android:textColor="@color/colorTextDark"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/etDialogVisitDate"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:background="@drawable/edittext_border"
+                android:focusable="false"
+                android:hint="Select date..."
+                android:inputType="none"
+                android:paddingHorizontal="12dp"
+                android:textColor="@color/colorTextDark"
+                android:textColorHint="@color/colorTextLight"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/btnDialogDatePicker"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:text="Choose" />
+        </LinearLayout>
+
+        <!-- 2. Child's Name Input -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Child's Name"
+            android:textColor="@color/colorTextDark"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etDialogChildName"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/edittext_border"
+            android:hint="Enter child's full name"
+            android:inputType="textPersonName"
+            android:paddingHorizontal="12dp"
+            android:textColor="@color/colorTextDark"
+            android:textColorHint="@color/colorTextLight"
+            android:textSize="14sp" />
+
+        <!-- 2.5 Child's Age Input -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Child's Age"
+            android:textColor="@color/colorTextDark"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etDialogChildAge"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/edittext_border"
+            android:hint="Example: 3 years or 8 months"
+            android:inputType="text"
+            android:paddingHorizontal="12dp"
+            android:textColor="@color/colorTextDark"
+            android:textColorHint="@color/colorTextLight"
+            android:textSize="14sp" />
+
+        <!-- 3. Chief Complaint Input -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Chief Complaint"
+            android:textColor="@color/colorTextDark"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etDialogComplaint"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/edittext_border"
+            android:gravity="top|start"
+            android:hint="Example: High fever since last night and cough/cold."
+            android:inputType="textMultiLine"
+            android:padding="12dp"
+            android:textColor="@color/colorTextDark"
+            android:textColorHint="@color/colorTextLight"
+            android:textSize="14sp" />
+
+        <!-- 4. Payment Method Input -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Payment Method"
+            android:textColor="@color/colorTextDark"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <RadioGroup
+            android:id="@+id/rgDialogPayment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbDialogUmum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Cash / Independent"
+                android:textColor="@color/colorTextDark" />
+
+            <RadioButton
+                android:id="@+id/rbDialogAsuransi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:text="Insurance / BPJS"
+                android:textColor="@color/colorTextDark" />
+        </RadioGroup>
+
+        <!-- Action Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:gravity="end"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnDialogCancel"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cancel"
+                android:textColor="@color/colorTextLight" />
+
+            <Button
+                android:id="@+id/btnDialogSubmit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:text="Submit Registration"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

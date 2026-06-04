@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:background="@color/colorCardBg">
+
+        <TextView
+            android:id="@+id/tvDialogTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Medical Examination"
+            android:textColor="@color/colorTextDark"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvDialogSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="Enter clinical diagnosis and pediatric prescriptions"
+            android:textColor="@color/colorTextLight"
+            android:textSize="12sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="12dp"
+            android:background="@color/colorBorder" />
+
+        <!-- Patient Info Summary -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#F8FAFC"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/tvDialogPatientInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Patient: -"
+                android:textColor="@color/colorTextDark"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvDialogComplaintInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="Complaint: -"
+                android:textColor="@color/colorTextLight"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <!-- Diagnosis Input -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Diagnosis"
+            android:textColor="@color/colorTextDark"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etDialogDiagnosis"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/edittext_border"
+            android:hint="e.g. Common Cold, Acute Pharyngitis"
+            android:inputType="text"
+            android:paddingHorizontal="12dp"
+            android:textColor="@color/colorTextDark"
+            android:textColorHint="@color/colorTextLight"
+            android:textSize="14sp" />
+
+        <!-- Prescription Layout (Interactive Chips) -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Prescribed Medicines"
+            android:textColor="@color/colorTextDark"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <!-- Selected medicines horizontal scrolling list of chips -->
+        <HorizontalScrollView
+            android:id="@+id/hsvSelectedMedicines"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:id="@+id/layoutSelectedMedicines"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingVertical="4dp" />
+        </HorizontalScrollView>
+
+        <!-- Button to trigger adding a medicine chip -->
+        <Button
+            android:id="@+id/btnAddMedicineChip"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="( + ) Add Medicine"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold" />
+
+        <!-- Hidden container for search suggestion -->
+        <LinearLayout
+            android:id="@+id/layoutAutocompleteSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <AutoCompleteTextView
+                android:id="@+id/actvMedicineSearch"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/edittext_border"
+                android:hint="Type medicine name (e.g. Paracetamol)..."
+                android:completionThreshold="1"
+                android:paddingHorizontal="12dp"
+                android:textColor="@color/colorTextDark"
+                android:textColorHint="@color/colorTextLight"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- Action Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:gravity="end"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnDialogCancel"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cancel"
+                android:textColor="@color/colorTextLight" />
+
+            <Button
+                android:id="@+id/btnDialogSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:text="Save Examination"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

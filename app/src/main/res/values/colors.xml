@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    
+    <!-- Primary Theme Colors (Tailwind Mockup Palette) -->
+    <color name="colorPrimary">#006565</color>
+    <color name="colorPrimaryDark">#004F4F</color>
+    <color name="colorPrimaryLight">#E3FFFE</color>
+    <color name="colorAccent">#4755b6</color>
+    
+    <!-- Secondary Colors (Navy & Slate) -->
+    <color name="colorSecondary">#4755b6</color>
+    <color name="colorTextDark">#191C1D</color>
+    <color name="colorTextLight">#3E4949</color>
+    
+    <!-- Backgrounds -->
+    <color name="colorBgLight">#F8F9FA</color>
+    <color name="colorCardBg">#FFFFFF</color>
+    <color name="colorBorder">#BDC9C8</color>
+    
+    <!-- Status Colors -->
+    <color name="status_waiting_bg">#FFDFA0</color>
+    <color name="status_waiting_text">#745600</color>
+    <color name="status_verified_bg">#DFE0FF</color>
+    <color name="status_verified_text">#2D3C9C</color>
+    <color name="status_checking_bg">#F3E8FF</color>
+    <color name="status_checking_text">#9333EA</color>
+    <color name="status_exam_done_bg">#E0F2FE</color>
+    <color name="status_exam_done_text">#0284C7</color>
+    <color name="status_completed_bg">#D1FAE5</color>
+    <color name="status_completed_text">#059669</color>
+</resources>

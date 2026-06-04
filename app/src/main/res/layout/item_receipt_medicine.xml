@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="3dp">
+
+    <TextView
+        android:id="@+id/tvReceiptMedName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@id/tvReceiptMedCost"
+        android:text="- Paracetamol Syrup (2x) @ Rp 35,000"
+        android:textColor="@color/colorTextLight"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/tvReceiptMedCost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:text="Rp 70,000"
+        android:textColor="@color/colorTextLight"
+        android:textSize="13sp" />
+</RelativeLayout>
