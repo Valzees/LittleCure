@@ -121,31 +121,7 @@ public class LoginActivity extends AppCompatActivity {
         // Forgot password dialog trigger
         tvForgotPassword.setOnClickListener(v -> showForgotPasswordDialog());
 
-        // Developer Quick Bypass Buttons for quick role testing
-        Button btnBypassAdmin = findViewById(R.id.btnBypassAdmin);
-        Button btnBypassDokter = findViewById(R.id.btnBypassDokter);
-        Button btnBypassPasien = findViewById(R.id.btnBypassPasien);
 
-        btnBypassAdmin.setOnClickListener(v -> {
-            etUsername.setText("admin");
-            etPassword.setText("admin");
-            cbRememberMe.setChecked(true);
-            handleLogin();
-        });
-
-        btnBypassDokter.setOnClickListener(v -> {
-            etUsername.setText("dokter");
-            etPassword.setText("dokter");
-            cbRememberMe.setChecked(true);
-            handleLogin();
-        });
-
-        btnBypassPasien.setOnClickListener(v -> {
-            etUsername.setText("pasien");
-            etPassword.setText("pasien");
-            cbRememberMe.setChecked(true);
-            handleLogin();
-        });
     }
 
     private void showRegisterScreen() {
