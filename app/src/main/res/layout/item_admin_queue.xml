@@ -153,17 +153,6 @@
                 android:textStyle="bold"
                 app:cornerRadius="23dp"
                 android:visibility="visible" />
-
-            <ImageButton
-                android:id="@+id/btnAdminContact"
-                android:layout_width="46dp"
-                android:layout_height="46dp"
-                android:layout_marginStart="8dp"
-                android:background="@drawable/avatar_circle_bg"
-                android:backgroundTint="@color/status_completed_bg"
-                android:src="@android:drawable/ic_menu_send"
-                app:tint="@color/colorPrimary"
-                android:contentDescription="Contact via WhatsApp" />
         </LinearLayout>
 
     </LinearLayout>

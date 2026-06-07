@@ -424,40 +424,7 @@ public class AdminActivity extends AppCompatActivity {
                 holder.btnAction.setVisibility(View.GONE);
             }
 
-            // WhatsApp intent trigger for contact
-            if (phone != null && !phone.trim().isEmpty()) {
-                holder.btnContact.setVisibility(View.VISIBLE);
-                final String finalParentName = parentName;
-                final String finalChildName = childName;
-                final String finalNoAntrean = noAntrean;
-                holder.btnContact.setOnClickListener(v -> {
-                    try {
-                        String cleanPhone = phone.replaceAll("[^0-9+]", "");
-                        if (!cleanPhone.startsWith("+")) {
-                            if (cleanPhone.startsWith("0")) {
-                                cleanPhone = "+62" + cleanPhone.substring(1);
-                            } else if (!cleanPhone.startsWith("62")) {
-                                cleanPhone = "+62" + cleanPhone;
-                            } else {
-                                cleanPhone = "+" + cleanPhone;
-                            }
-                        }
 
-                        String childDisp = finalChildName.isEmpty() ? "your child" : "Child " + finalChildName;
-                        String antreanDisp = (finalNoAntrean != null && !finalNoAntrean.trim().isEmpty()) ? finalNoAntrean : ("A-" + String.format("%03d", id));
-                        String message = "Hello Mr./Ms. " + finalParentName + ", the registration for " + childDisp + " for the doctor's visit at LittleCure has been verified. Your Queue Number is: " + antreanDisp + ". Please arrive at the clinic. Thank you!";
-
-                        String url = "https://api.whatsapp.com/send?phone=" + cleanPhone + "&text=" + Uri.encode(message);
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setData(Uri.parse(url));
-                        startActivity(intent);
-                    } catch (Exception e) {
-                        Toast.makeText(AdminActivity.this, "Failed to open WhatsApp: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-            } else {
-                holder.btnContact.setVisibility(View.GONE);
-            }
         }
 
         private void styleStatusBadge(TextView tv, String status) {
@@ -492,7 +459,6 @@ public class AdminActivity extends AppCompatActivity {
             TextView tvAdminDiagnosis, tvAdminPrescription;
             LinearLayout layoutAdminMedDetails;
             Button btnAction;
-            ImageButton btnContact;
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -508,7 +474,6 @@ public class AdminActivity extends AppCompatActivity {
                 tvAdminPrescription = itemView.findViewById(R.id.tvAdminPrescription);
                 
                 btnAction = itemView.findViewById(R.id.btnAdminAction);
-                btnContact = itemView.findViewById(R.id.btnAdminContact);
             }
         }
     }
