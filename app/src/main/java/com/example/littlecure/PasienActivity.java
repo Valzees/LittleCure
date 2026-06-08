@@ -31,6 +31,18 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Map;
+import android.graphics.pdf.PdfDocument;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.net.Uri;
+import android.os.Environment;
+import android.util.Log;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class PasienActivity extends AppCompatActivity {
 
@@ -258,13 +270,16 @@ public class PasienActivity extends AppCompatActivity {
         Button btnDialogCancel = dialogView.findViewById(R.id.btnDialogCancel);
         Button btnDialogSubmit = dialogView.findViewById(R.id.btnDialogSubmit);
 
-        // Pre-fill child name from SQLite/prefs if available as fallback, but keep editable
+        // Pre-fill child name and age/DOB from SQLite/prefs if available as fallback, but keep editable
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         String childDisplayName = prefs.getString("childName_" + currentUsername, "");
         if (childDisplayName.isEmpty()) {
             childDisplayName = prefs.getString("childName", "");
         }
         etDialogChildName.setText(childDisplayName);
+
+        String childDisplayAge = prefs.getString("childDob_" + currentUsername, "");
+        etDialogChildAge.setText(childDisplayAge);
 
         // Setup date picker
         btnDialogDatePicker.setOnClickListener(v -> showDatePicker(etDialogVisitDate));
@@ -316,6 +331,13 @@ public class PasienActivity extends AppCompatActivity {
 
             // Database concatenation
             String finalComplaint = childName + " (" + childAge + ") - " + complaint;
+
+            // Update user child details permanently in database and SharedPreferences session
+            dbHelper.updateUserChildDetails(currentUsername, childName, childAge);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString("childName_" + currentUsername, childName);
+            editor.putString("childDob_" + currentUsername, childAge);
+            editor.apply();
 
             boolean success = dbHelper.addPendaftaran(currentUserId, visitDate, finalComplaint, payment);
             if (success) {
@@ -665,6 +687,16 @@ public class PasienActivity extends AppCompatActivity {
                 childName = nameAge;
             }
         }
+
+        // Override childName & childAge with current user profile if available to reflect updates immediately
+        String currentChildName = prefs.getString("childName_" + currentUsername, "");
+        if (!currentChildName.isEmpty()) {
+            childName = currentChildName;
+        }
+        String currentChildAge = prefs.getString("childDob_" + currentUsername, "");
+        if (!currentChildAge.isEmpty()) {
+            childAge = currentChildAge;
+        }
         tvReceiptChildName.setText("Child Name: " + childName);
         tvReceiptChildAge.setText("Child Age: " + childAge);
         tvReceiptComplaint.setText("Chief Complaint: " + chiefComplaint);
@@ -784,13 +816,213 @@ public class PasienActivity extends AppCompatActivity {
             });
         }
 
+        final String finalTicket = ticket;
+        final String finalChildName = childName;
+        final String finalChildAge = childAge;
+        final String finalChiefComplaint = chiefComplaint;
+        final String finalParentDisplayName = parentDisplayName;
+        final String finalParentPhone = parentPhone;
+
         btnReceiptDownload.setOnClickListener(v -> {
-            Toast.makeText(this, "Downloading Medical Record PDF...", Toast.LENGTH_SHORT).show();
+            generateReceiptPdf(item, finalChildName, finalChildAge, finalChiefComplaint, finalParentDisplayName, finalParentPhone, finalTicket, consultationFee);
         });
 
         btnReceiptClose.setOnClickListener(v -> dialog.dismiss());
 
         dialog.show();
+    }
+
+    private void generateReceiptPdf(Map<String, String> item, String childName, String childAge, 
+                                    String chiefComplaint, String parentDisplayName, String parentPhone, 
+                                    String ticket, int consultationFee) {
+        String date = item.get("date");
+        String payment = translatePaymentMethod(item.get("payment"));
+        String diagnosis = item.get("diagnosis") != null ? item.get("diagnosis") : "-";
+        String rawPrescription = item.get("prescription");
+
+        PdfDocument document = new PdfDocument();
+        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(595, 842, 1).create();
+        PdfDocument.Page page = document.startPage(pageInfo);
+        Canvas canvas = page.getCanvas();
+
+        Paint titlePaint = new Paint();
+        titlePaint.setColor(Color.parseColor("#4F46E5")); // Sleek Indigo
+        titlePaint.setTextSize(22);
+        titlePaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+        titlePaint.setAntiAlias(true);
+
+        Paint subTitlePaint = new Paint();
+        subTitlePaint.setColor(Color.GRAY);
+        subTitlePaint.setTextSize(10);
+        subTitlePaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+        subTitlePaint.setAntiAlias(true);
+
+        Paint headerPaint = new Paint();
+        headerPaint.setColor(Color.parseColor("#1F2937")); // Slate gray
+        headerPaint.setTextSize(14);
+        headerPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+        headerPaint.setAntiAlias(true);
+
+        Paint normalPaint = new Paint();
+        normalPaint.setColor(Color.BLACK);
+        normalPaint.setTextSize(11);
+        normalPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+        normalPaint.setAntiAlias(true);
+
+        Paint linePaint = new Paint();
+        linePaint.setColor(Color.parseColor("#E5E7EB")); // Light Gray border line
+        linePaint.setStrokeWidth(1.5f);
+
+        int y = 60;
+        canvas.drawText("LITTLE CURE CLINIC", 50, y, titlePaint);
+        y += 18;
+        canvas.drawText("Layanan Kesehatan Anak Terpercaya", 50, y, subTitlePaint);
+        y += 20;
+
+        canvas.drawLine(50, y, 545, y, linePaint);
+        y += 25;
+
+        canvas.drawText("STRUK PEMBAYARAN & REKAM MEDIS", 50, y, headerPaint);
+        y += 25;
+
+        canvas.drawText("Tanggal Kunjungan: " + date, 50, y, normalPaint);
+        canvas.drawText("Nomor Antrean: " + ticket, 350, y, normalPaint);
+        y += 20;
+
+        canvas.drawText("Metode Pembayaran: " + payment, 50, y, normalPaint);
+        canvas.drawText("Status: LUNAS", 350, y, normalPaint);
+        y += 30;
+
+        canvas.drawLine(50, y, 545, y, linePaint);
+        y += 25;
+
+        canvas.drawText("INFORMASI PASIEN", 50, y, headerPaint);
+        y += 20;
+        canvas.drawText("Nama Anak: " + childName, 50, y, normalPaint);
+        canvas.drawText("Umur Anak: " + childAge, 350, y, normalPaint);
+        y += 20;
+        canvas.drawText("Orang Tua/Wali: " + parentDisplayName, 50, y, normalPaint);
+        canvas.drawText("No. Telepon: " + parentPhone, 350, y, normalPaint);
+        y += 30;
+
+        canvas.drawLine(50, y, 545, y, linePaint);
+        y += 25;
+
+        canvas.drawText("DIAGNOSIS KLINIS", 50, y, headerPaint);
+        y += 20;
+        canvas.drawText(diagnosis, 50, y, normalPaint);
+        y += 30;
+
+        canvas.drawLine(50, y, 545, y, linePaint);
+        y += 25;
+
+        canvas.drawText("RINCIAN BIAYA & OBAT", 50, y, headerPaint);
+        y += 25;
+
+        canvas.drawText("Biaya Konsultasi Dokter", 50, y, normalPaint);
+        canvas.drawText("Rp " + String.format("%,d", consultationFee), 420, y, normalPaint);
+        y += 25;
+
+        int medicinesTotal = 0;
+        if (rawPrescription != null && !rawPrescription.trim().isEmpty() && !rawPrescription.equals("-")) {
+            String[] meds = rawPrescription.split(",\\s*");
+            for (String med : meds) {
+                if (med.trim().isEmpty()) continue;
+
+                String name = med.trim();
+                int qty = 1;
+                if (name.contains(" (") && name.endsWith("x)")) {
+                    int openParen = name.lastIndexOf(" (");
+                    String qtyStr = name.substring(openParen + 2, name.length() - 2);
+                    try {
+                        qty = Integer.parseInt(qtyStr);
+                    } catch (NumberFormatException e) {
+                        qty = 1;
+                    }
+                    name = name.substring(0, openParen).trim();
+                }
+
+                int unitPrice = dbHelper.getObatPrice(name);
+                int cost = unitPrice * qty;
+                medicinesTotal += cost;
+
+                canvas.drawText("- " + name + " (" + qty + "x)", 50, y, normalPaint);
+                canvas.drawText("Rp " + String.format("%,d", cost), 420, y, normalPaint);
+                y += 20;
+            }
+        } else {
+            canvas.drawText("Tidak ada resep obat.", 50, y, normalPaint);
+            y += 20;
+        }
+
+        y += 10;
+        canvas.drawLine(50, y, 545, y, linePaint);
+        y += 25;
+
+        int grandTotal = consultationFee + medicinesTotal;
+        Paint boldPaint = new Paint();
+        boldPaint.setColor(Color.BLACK);
+        boldPaint.setTextSize(12);
+        boldPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+        boldPaint.setAntiAlias(true);
+
+        canvas.drawText("TOTAL PEMBAYARAN", 50, y, boldPaint);
+        canvas.drawText("Rp " + String.format("%,d", grandTotal), 420, y, boldPaint);
+        y += 40;
+
+        canvas.drawLine(50, y, 545, y, linePaint);
+        y += 25;
+
+        Paint footerPaint = new Paint();
+        footerPaint.setColor(Color.GRAY);
+        footerPaint.setTextSize(9);
+        footerPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.ITALIC));
+        footerPaint.setAntiAlias(true);
+
+        canvas.drawText("Terima kasih telah memercayakan kesehatan putra-putri Anda pada Little Cure.", 50, y, footerPaint);
+        y += 12;
+        canvas.drawText("Struk ini adalah bukti pembayaran yang sah.", 50, y, footerPaint);
+
+        document.finishPage(page);
+
+        // Save file to app's internal cache folder
+        File pdfFile = new File(getCacheDir(), "Receipt_" + ticket + ".pdf");
+
+        try {
+            FileOutputStream fos = new FileOutputStream(pdfFile);
+            document.writeTo(fos);
+            fos.close();
+            document.close();
+
+            // Share/open the PDF via sharesheet
+            shareReceiptPdf(pdfFile);
+
+            Toast.makeText(this, "PDF berhasil dibuat!", Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            Log.e("PasienActivity", "Error saving PDF: " + e.getMessage());
+            Toast.makeText(this, "Gagal membuat PDF: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            document.close();
+        }
+    }
+
+    private void shareReceiptPdf(File pdfFile) {
+        try {
+            Uri pdfUri = androidx.core.content.FileProvider.getUriForFile(
+                this, 
+                "com.example.littlecure.fileprovider", 
+                pdfFile
+            );
+
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("application/pdf");
+            intent.putExtra(Intent.EXTRA_STREAM, pdfUri);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            
+            startActivity(Intent.createChooser(intent, "Download / Cetak Struk PDF"));
+        } catch (Exception e) {
+            Log.e("PasienActivity", "Error sharing PDF: " + e.getMessage());
+            Toast.makeText(this, "Gagal membagikan PDF: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void loadProfileData() {

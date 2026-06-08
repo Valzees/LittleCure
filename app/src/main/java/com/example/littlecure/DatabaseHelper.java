@@ -10,7 +10,7 @@ import android.util.Log;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "LittleCure.db";
-    private static final int DATABASE_VERSION = 2; // Upgraded version to support user profiles
+    private static final int DATABASE_VERSION = 6; // Upgraded version to support user profiles & automatic extensive dummy data seeding, incremented to reset DB
     private static final String TAG = "DatabaseHelper";
 
     // Table names
@@ -90,12 +90,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + "FOREIGN KEY(" + KEY_RM_PENDAFTARAN_ID + ") REFERENCES " + TABLE_PENDAFTARAN + "(" + KEY_ID + ")" + ")";
         db.execSQL(CREATE_REKAM_MEDIS_TABLE);
 
+        // Create Obat Table
+        db.execSQL("CREATE TABLE IF NOT EXISTS obat(id INTEGER PRIMARY KEY AUTOINCREMENT, nama TEXT UNIQUE, harga INTEGER)");
+        db.execSQL("INSERT OR IGNORE INTO obat(nama, harga) VALUES('Paracetamol Syrup', 35000)");
+        db.execSQL("INSERT OR IGNORE INTO obat(nama, harga) VALUES('Amoxicillin Syrup', 50000)");
+        db.execSQL("INSERT OR IGNORE INTO obat(nama, harga) VALUES('Cazetin Nystatin Drop', 45000)");
+        db.execSQL("INSERT OR IGNORE INTO obat(nama, harga) VALUES('Lactobe (Obat Diare)', 30000)");
+        db.execSQL("INSERT OR IGNORE INTO obat(nama, harga) VALUES('Apialys Drop (Vitamin)', 25000)");
+        db.execSQL("INSERT OR IGNORE INTO obat(nama, harga) VALUES('Tempra Drop', 40000)");
+        db.execSQL("INSERT OR IGNORE INTO obat(nama, harga) VALUES('OBH Anak Syrup', 20000)");
+        db.execSQL("INSERT OR IGNORE INTO obat(nama, harga) VALUES('Bisolvon Kids Syrup', 30000)");
+        db.execSQL("INSERT OR IGNORE INTO obat(nama, harga) VALUES('Sanmol Drop', 35000)");
+        db.execSQL("INSERT OR IGNORE INTO obat(nama, harga) VALUES('Zamel Syrup (Vitamin)', 30000)");
+
         // Seed Default Users
         seedDefaultUsers(db);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS obat");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_REKAM_MEDIS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PENDAFTARAN);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
@@ -118,8 +132,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             doctorValues.put(KEY_USER_ROLE, "dokter");
             db.insert(TABLE_USERS, null, doctorValues);
 
-            // Patient user with realistic data seeded directly in SQLite
+            // Patient user 1 (Default)
             ContentValues patientValues = new ContentValues();
+            patientValues.put(KEY_ID, 3);
             patientValues.put(KEY_USER_USERNAME, "pasien");
             patientValues.put(KEY_USER_PASSWORD, "pasien");
             patientValues.put(KEY_USER_ROLE, "pasien");
@@ -129,9 +144,109 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             patientValues.put(KEY_USER_CHILD_DOB, "2022-10-15");
             db.insert(TABLE_USERS, null, patientValues);
 
-            Log.d(TAG, "Default users seeded successfully.");
+            // Patient user 2 (Lisa)
+            ContentValues lisaValues = new ContentValues();
+            lisaValues.put(KEY_ID, 5);
+            lisaValues.put(KEY_USER_USERNAME, "lisa@gmail.com");
+            lisaValues.put(KEY_USER_PASSWORD, "123456");
+            lisaValues.put(KEY_USER_ROLE, "pasien");
+            lisaValues.put(KEY_USER_PARENT_NAME, "Lisa Permata");
+            lisaValues.put(KEY_USER_PHONE, "081298765432");
+            lisaValues.put(KEY_USER_CHILD_NAME, "Roni");
+            lisaValues.put(KEY_USER_CHILD_DOB, "2021-04-10");
+            db.insert(TABLE_USERS, null, lisaValues);
+
+            // Patient user 3 (Hendra)
+            ContentValues hendraValues = new ContentValues();
+            hendraValues.put(KEY_ID, 6);
+            hendraValues.put(KEY_USER_USERNAME, "hendra@gmail.com");
+            hendraValues.put(KEY_USER_PASSWORD, "123456");
+            hendraValues.put(KEY_USER_ROLE, "pasien");
+            hendraValues.put(KEY_USER_PARENT_NAME, "Hendra Wijaya");
+            hendraValues.put(KEY_USER_PHONE, "085612345678");
+            hendraValues.put(KEY_USER_CHILD_NAME, "Siti");
+            hendraValues.put(KEY_USER_CHILD_DOB, "2023-01-20");
+            db.insert(TABLE_USERS, null, hendraValues);
+
+            // Patient user 4 (Dewi)
+            ContentValues dewiValues = new ContentValues();
+            dewiValues.put(KEY_ID, 7);
+            dewiValues.put(KEY_USER_USERNAME, "dewi@gmail.com");
+            dewiValues.put(KEY_USER_PASSWORD, "123456");
+            dewiValues.put(KEY_USER_ROLE, "pasien");
+            dewiValues.put(KEY_USER_PARENT_NAME, "Dewi Lestari");
+            dewiValues.put(KEY_USER_PHONE, "087811223344");
+            dewiValues.put(KEY_USER_CHILD_NAME, "Boni");
+            dewiValues.put(KEY_USER_CHILD_DOB, "2021-08-05");
+            db.insert(TABLE_USERS, null, dewiValues);
+            // Seed Pendaftaran
+            int[][] pendaftarans = {
+                {1, 3}, {2, 3}, {3, 5}, {4, 5}, {5, 6}, {6, 6}, {7, 7}, {8, 7}, {10, 6}, {11, 7}, {12, 7}
+            };
+            String[] dates = {"2026-06-09", "2026-06-08", "2026-06-09", "2026-06-06", "2026-06-09", "2026-06-07", "2026-06-09", "2026-06-05", "2026-05-30", "2026-06-01", "2026-05-28"};
+            String[] complaints = {
+                "Andi (3 tahun) - Demam tinggi sejak tadi malam",
+                "Andi (3 tahun) - Batuk berdahak",
+                "Roni (5 tahun) - Gatal-gatal di seluruh tubuh setelah makan seafood",
+                "Roni (5 tahun) - Diare ringan",
+                "Siti (3 tahun) - Nafsu makan menurun dan lemas",
+                "Siti (3 tahun) - Batuk pilek",
+                "Boni (5 tahun) - Sakit telinga kanan",
+                "Boni (5 tahun) - Luka lecet di lutut",
+                "Siti (3 tahun) - Imunisasi rutin",
+                "Boni (5 tahun) - Demam sumeng",
+                "Boni (5 tahun) - Kontrol tumbuh kembang"
+            };
+            String[] payments = {"Cash", "Cash", "Insurance", "Cash", "Cash", "Cash", "Cash", "Cash", "Insurance", "Cash", "Insurance"};
+            String[] statuses = {STATUS_WAITING, STATUS_COMPLETED, STATUS_VERIFIED, STATUS_COMPLETED, STATUS_CHECKING, STATUS_EXAM_DONE, STATUS_PAID_PENDING, STATUS_COMPLETED, STATUS_COMPLETED, STATUS_COMPLETED, STATUS_COMPLETED};
+            String[] tickets = {"", "A-001", "A-002", "A-004", "A-003", "A-002", "A-004", "A-003", "A-001", "A-005", "A-002"};
+
+            for (int i = 0; i < pendaftarans.length; i++) {
+                ContentValues pendValues = new ContentValues();
+                pendValues.put(KEY_ID, pendaftarans[i][0]);
+                pendValues.put(KEY_PEND_USER_ID, pendaftarans[i][1]);
+                pendValues.put(KEY_PEND_TANGGAL, dates[i]);
+                pendValues.put(KEY_PEND_KELUHAN, complaints[i]);
+                pendValues.put(KEY_PEND_JENIS_BAYAR, payments[i]);
+                pendValues.put(KEY_PEND_STATUS, statuses[i]);
+                pendValues.put(KEY_PEND_NO_ANTREAN, tickets[i]);
+                db.insert(TABLE_PENDAFTARAN, null, pendValues);
+            }
+
+            // Seed Rekam Medis
+            int[] rmPids = {2, 4, 6, 7, 8, 10, 11, 12};
+            String[] diagnoses = {
+                "ISPA (Infeksi Saluran Pernapasan Akut)",
+                "Gastroenteritis Ringan",
+                "Rinitis Alergi",
+                "Otitis Media Akut",
+                "Luka Ekskoriasi Lutut Kanan",
+                "Imunisasi Booster",
+                "Febris Observasi",
+                "Tumbuh Kembang Normal"
+            };
+            String[] prescriptions = {
+                "OBH Anak Syrup (1x), Amoxicillin Syrup (1x)",
+                "Lactobe (Obat Diare) (2x), Apialys Drop (Vitamin) (1x)",
+                "Bisolvon Kids Syrup (1x)",
+                "Amoxicillin Syrup (1x), Apialys Drop (Vitamin) (1x)",
+                "-",
+                "-",
+                "Paracetamol Syrup (1x)",
+                "-"
+            };
+
+            for (int i = 0; i < rmPids.length; i++) {
+                ContentValues rmValues = new ContentValues();
+                rmValues.put(KEY_RM_PENDAFTARAN_ID, rmPids[i]);
+                rmValues.put(KEY_RM_DIAGNOSA, diagnoses[i]);
+                rmValues.put(KEY_RM_RESEP_OBAT, prescriptions[i]);
+                db.insert(TABLE_REKAM_MEDIS, null, rmValues);
+            }
+
+            Log.d(TAG, "Default users and extensive dummy records seeded successfully.");
         } catch (Exception e) {
-            Log.e(TAG, "Error seeding default users: " + e.getMessage());
+            Log.e(TAG, "Error seeding default data: " + e.getMessage());
         }
     }
 
@@ -148,6 +263,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_USER_CHILD_NAME, childName);
         values.put(KEY_USER_CHILD_DOB, childDob);
 
+        if (username != null) {
+            String cleanEmail = username.trim().toLowerCase();
+            if (cleanEmail.equals("dummy@gmail.com")) {
+                values.put(KEY_ID, 4);
+            } else if (cleanEmail.equals("lisa@gmail.com")) {
+                values.put(KEY_ID, 5);
+            } else if (cleanEmail.equals("hendra@gmail.com")) {
+                values.put(KEY_ID, 6);
+            } else if (cleanEmail.equals("dewi@gmail.com")) {
+                values.put(KEY_ID, 7);
+            }
+        }
+
         long result = db.insert(TABLE_USERS, null, values);
         return result != -1;
     }
@@ -155,13 +283,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor checkUserLogin(String username, String password) {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT * FROM " + TABLE_USERS + " WHERE " 
-                + KEY_USER_USERNAME + " = ? AND " + KEY_USER_PASSWORD + " = ?";
+                + KEY_USER_USERNAME + " = ? COLLATE NOCASE AND " + KEY_USER_PASSWORD + " = ?";
         return db.rawQuery(query, new String[]{username, password});
     }
 
     public Cursor getUserByUsername(String username) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT * FROM " + TABLE_USERS + " WHERE " + KEY_USER_USERNAME + " = ?";
+        String query = "SELECT * FROM " + TABLE_USERS + " WHERE " + KEY_USER_USERNAME + " = ? COLLATE NOCASE";
         return db.rawQuery(query, new String[]{username});
     }
 
@@ -178,6 +306,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_USER_PASSWORD, newPassword);
+        int result = db.update(TABLE_USERS, values, KEY_USER_USERNAME + " = ?", new String[]{username});
+        return result > 0;
+    }
+
+    public boolean updateUserChildDetails(String username, String childName, String childDob) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_USER_CHILD_NAME, childName);
+        values.put(KEY_USER_CHILD_DOB, childDob);
         int result = db.update(TABLE_USERS, values, KEY_USER_USERNAME + " = ?", new String[]{username});
         return result > 0;
     }
